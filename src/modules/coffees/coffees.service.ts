@@ -10,7 +10,7 @@ export class CoffeesService {
   private readonly coffees: CoffeeDto[] = [
     {
       id: 1,
-      nome: 'Paraíso',
+      nome: 'Mata sono',
       tipo: 'Forte',
       quantidade: 10,
       preco: 10,

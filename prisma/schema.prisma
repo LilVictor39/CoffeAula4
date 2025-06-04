@@ -14,8 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
+model Cofe {
+  id      Int @id @default(autoincrement())
+  nome    String
+  tipo    String
+  preco   Float
+  des     String
+  tags    TagCafe[]
+  //itenas  ItemPedido[]
 }
+
+model TagCafe{
+  id      Int   @id @default(autoincrement())
+  nome    String
+  cofeId  Int
+  cofe    Cofe  @relation(fields: [cofeId], references: [id])
+}
+
+
