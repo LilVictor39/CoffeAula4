@@ -14,21 +14,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Cofe {
-  id      Int @id @default(autoincrement())
-  nome    String
-  tipo    String
-  preco   Float
-  des     String
-  tags    TagCafe[]
-  //itenas  ItemPedido[]
+model Cafe {
+  id          Int           @id @default(autoincrement())
+  nome        String
+  tipo        String
+  preco       Float
+  descricao   String
+  tags        TagCafe[]
+  itensPedido ItemPedido[]
 }
 
-model TagCafe{
-  id      Int   @id @default(autoincrement())
+model TagCafe {
+  id      Int    @id @default(autoincrement())
   nome    String
-  cofeId  Int
-  cofe    Cofe  @relation(fields: [cofeId], references: [id])
+  cafeId  Int
+  cafe    Cafe   @relation(fields: [cafeId], references: [id])
 }
 
+model Cliente {
+  id       Int      @id @default(autoincrement())
+  nome     String
+  email    String   @unique
+  cpf      String   @unique
+  telefone String
+  pedidos  Pedido[]
+}
 
+model Pedido {
+  id           Int          @id @default(autoincrement())
+  clienteId    Int
+  cliente      Cliente      @relation(fields: [clienteId], references: [id])
+  dataPedido   DateTime     @default(now())
+  total        Float
+  entrega      Entrega?
+  itensPedido  ItemPedido[]
+}
+
+model ItemPedido {
+  id        Int     @id @default(autoincrement())
+  pedidoId  Int
+  cafeId    Int
+  quantidade Int
+  preco     Float
+
+  pedido    Pedido  @relation(fields: [pedidoId], references: [id])
+  cafe      Cafe    @relation(fields: [cafeId], references: [id])
+}
+
+model Entrega {
+  id                Int      @id @default(autoincrement())
+  enderecoEntrega   String
+  status            String   // pendente | em_transito | entregue
+  dataPrevista      DateTime
+  pedidoId          Int      @unique
+  pedido            Pedido   @relation(fields: [pedidoId], references: [id])
+}
